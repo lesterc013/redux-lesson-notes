@@ -1,4 +1,4 @@
-import { createNoteAction } from '../reducers/noteReducer'
+import { createNote } from '../reducers/noteReducer'
 import { useDispatch } from 'react-redux'
 
 const NewNote = () => {
@@ -11,7 +11,7 @@ const NewNote = () => {
     // Reset the input field to empty string
     event.target.note.value = ''
     // store.dispatch(type and payload (newNote))
-    dispatch(createNoteAction(content))
+    dispatch(createNote(content))
   }
 
   return (
