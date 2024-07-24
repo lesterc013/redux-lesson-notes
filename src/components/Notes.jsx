@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { createSelector } from 'reselect'
 import { createToggleImportanceAction } from '../reducers/noteReducer'
 
 const Note = ({ note, handleClick }) => {
@@ -9,15 +10,22 @@ const Note = ({ note, handleClick }) => {
   )
 }
 
-const Notes = () => {
-  const notes = useSelector(({ notes, filter }) => {
+const selectNotes = (state) => state.notes
+const selectFilter = (state) => state.filter
+const selectFilteredNotes = createSelector(
+  [selectNotes, selectFilter],
+  (notes, filter) => {
     if (filter === 'ALL') {
       return notes
     }
     return filter === 'IMPORTANT'
       ? notes.filter((note) => note.important)
       : notes.filter((note) => !note.important)
-  })
+  }
+)
+
+const Notes = () => {
+  const notes = useSelector(selectFilteredNotes)
   const dispatch = useDispatch()
 
   // Define handleClick here and pass down as props to
