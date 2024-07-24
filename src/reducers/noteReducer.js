@@ -1,11 +1,11 @@
 const initialState = [
   {
-    content: 'the app state is in redux store',
+    content: 'reducer defines how redux store works',
     important: true,
     id: 1,
   },
   {
-    content: 'state changes are made with actions',
+    content: 'state of store can contain any data',
     important: false,
     id: 2,
   },
