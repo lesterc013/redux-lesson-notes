@@ -12,8 +12,8 @@ const NewNote = () => {
     // Reset the input field to empty string
     event.target.note.value = ''
     // store.dispatch(type and payload (newNote))
-    const newNote = await noteService.createNew(content)
-    dispatch(createNote(newNote))
+    // const newNote = await noteService.createNew(content)
+    dispatch(createNote(content))
   }
 
   return (
