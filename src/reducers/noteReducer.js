@@ -1,17 +1,7 @@
 import { createSlice, current } from '@reduxjs/toolkit'
+import noteService from '../../services/notes'
 
-const initialState = [
-  {
-    content: 'reducer defines how redux store works',
-    important: true,
-    id: 1,
-  },
-  {
-    content: 'state of store can contain any data',
-    important: false,
-    id: 2,
-  },
-]
+const initialState = []
 
 const generateId = () => Number((Math.random() * 1000000).toFixed(0))
 
@@ -21,12 +11,7 @@ const noteSlice = createSlice({
   initialState,
   reducers: {
     createNote(state, action) {
-      const content = action.payload
-      state.push({
-        content,
-        important: false,
-        id: generateId(),
-      })
+      state.push(action.payload)
     },
     createToggleImportance(state, action) {
       const id = action.payload
@@ -38,10 +23,36 @@ const noteSlice = createSlice({
       console.log(current(state))
       return state.map((note) => (note.id !== id ? note : changedNote))
     },
+    // To use this with the service to GET from db, then append to the Redux store
+    appendNote(state, action) {
+      state.push(action.payload)
+    },
+    // Same concept as appendNote but for multiple notes at once - i.e. GET all the notes, and then set state as it
+    setNotes(state, action) {
+      return action.payload
+    },
   },
 })
 
-export const { createNote, createToggleImportance } = noteSlice.actions
+export const initializeNotes = () => {
+  // Thunk to return an async function that:
+  return async (dispatch) => {
+    // Async call to get all notes from db
+    const notes = await noteService.getAll()
+    // Dispatch setNotes to update Redux store
+    dispatch(setNotes(notes))
+  }
+}
+
+// export const createNote = (content) => {
+//   return async (dispatch) => {
+//     const newNote = await noteService.createNew(content)
+//     dispatch(appendNote(newNote))
+//   }
+// }
+
+export const { createNote, createToggleImportance, appendNote, setNotes } =
+  noteSlice.actions
 export default noteSlice.reducer
 
 // const noteReducer = (state = initialState, action) => {
